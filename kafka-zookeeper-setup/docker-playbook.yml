@@ -1,0 +1,32 @@
+---
+- name: install prerequisites for docker
+  hosts: all
+  remote_user: vagrant
+  become: true
+  tasks:
+  - name: set selinux off
+    selinux:
+      policy: targeted
+      state: permissive
+       
+  - name: Add the br_netfilter module
+    modprobe:
+      name: br_netfilter
+      state: present
+        
+  - name: Add a br_netfilter.conf to modules-load.d permanently adding br_netfilter module 
+    lineinfile:
+      path: /etc/modules-load.d/br_netfilter.conf
+      line: br_netfilter.conf
+      create: yes
+        
+  - name: Remove swapfile from /etc/fstab
+    mount:
+      name: "{{ item }}"
+      fstype: swap
+      state: absent
+    with_items:
+    - swap
+    - none
+  roles:
+   - geerlingguy.docker
