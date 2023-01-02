@@ -265,6 +265,8 @@
                Environment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.17.0.8-2.el8_6.x86_64
                ExecStart=/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
                ExecStop=/opt/kafka/bin/kafka-server-stop.sh
+               Restart=on-failure
+               RestartSec=15s
                [Install]
                WantedBy=multi-user.target
       dest: /usr/lib/systemd/system/kafka.service
